@@ -1,13 +1,11 @@
 name: Spring Batch 5.1
-description: Enterprise batch processing framework for the Spring ecosystem, providing
-  reusable functions for processing large volumes of data including logging, transaction
-  management, job processing statistics, job restart, skip, and resource management.
+description: Enterprise batch processing framework for the Spring ecosystem, providing reusable functions for processing large volumes of data including logging, transaction management, job processing statistics, job restart, skip, and resource management.
 url: https://spring.io/projects/spring-batch
 tags:
-- Batch Processing
-- Spring Framework
-- Java
-- Enterprise
+  - Batch Processing
+  - Enterprise
+  - Java
+  - Spring Framework
 created: '2025'
 modified: '2026-03-16'
 apis: []
