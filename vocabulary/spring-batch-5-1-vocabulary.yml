@@ -1,0 +1,224 @@
+name: Spring Batch 5.1 Vocabulary
+description: >-
+  Domain vocabulary for Spring Batch 5.1 covering core batch processing
+  concepts, domain objects, processing patterns, fault tolerance terminology,
+  and operational metrics.
+version: 5.1.0
+created: '2026-05-02'
+modified: '2026-05-02'
+tags:
+  - Batch Processing
+  - Spring Framework
+  - Java
+  - Enterprise
+
+terms:
+  # Core Domain Objects
+  - term: Job
+    definition: >-
+      The top-level abstraction in Spring Batch representing an entire batch
+      process. A Job is an entity that encapsulates an entire batch process and
+      is configured via a JobBuilder. A Job has one or more Steps.
+    category: Domain Object
+    relatedTerms: [Step, JobInstance, JobExecution]
+    seeAlso: https://docs.spring.io/spring-batch/docs/5.1.x/reference/html/domain.html#job
+
+  - term: Step
+    definition: >-
+      A domain object that encapsulates an independent, sequential phase of a
+      batch Job. A Step contains all of the information necessary to define and
+      control the actual batch processing. Every Job is composed of one or more
+      Steps.
+    category: Domain Object
+    relatedTerms: [Job, StepExecution, Tasklet, Chunk]
+    seeAlso: https://docs.spring.io/spring-batch/docs/5.1.x/reference/html/domain.html#step
+
+  - term: JobInstance
+    definition: >-
+      The domain object representing a logical job run identified by a unique
+      combination of job name and job parameters. A JobInstance can have
+      multiple JobExecutions (retries), but the set of parameters is unique per
+      instance.
+    category: Domain Object
+    relatedTerms: [Job, JobExecution, JobParameters]
+
+  - term: JobExecution
+    definition: >-
+      The technical concept of a single attempt to run a Job. An execution may
+      end in failure or success. A given JobInstance can have multiple
+      JobExecutions as a result of restarts or failed attempts.
+    category: Domain Object
+    relatedTerms: [JobInstance, StepExecution, BatchStatus, ExitStatus]
+
+  - term: StepExecution
+    definition: >-
+      Represents a single attempt to execute a Step. A new StepExecution is
+      created each time a Step is run, including restarts. Contains all runtime
+      data for a step such as read/write counts, skip counts, and commit counts.
+    category: Domain Object
+    relatedTerms: [Step, JobExecution, ExecutionContext]
+
+  - term: ExecutionContext
+    definition: >-
+      A collection of key-value pairs that Spring Batch persists and manages.
+      Used to store state that allows jobs and steps to be restarted from the
+      point of failure. Scoped to either a JobExecution or a StepExecution.
+    category: Domain Object
+    relatedTerms: [JobExecution, StepExecution, JobRepository]
+
+  - term: JobParameters
+    definition: >-
+      A set of typed parameters (String, Long, Double, LocalDate) associated
+      with a JobInstance. Identifying parameters contribute to the job instance
+      identity; non-identifying parameters are passed to the job but do not
+      affect the instance key.
+    category: Domain Object
+    relatedTerms: [JobInstance, JobExecution]
+
+  - term: JobRepository
+    definition: >-
+      The persistence mechanism for all metadata related to Spring Batch domain
+      objects. Provides CRUD operations for JobInstance, JobExecution,
+      StepExecution, and ExecutionContext. Backed by a relational database.
+    category: Infrastructure
+    relatedTerms: [JobExecution, StepExecution, ExecutionContext]
+
+  # Processing Patterns
+  - term: Chunk-Oriented Processing
+    definition: >-
+      The primary processing pattern in Spring Batch where items are read one at
+      a time, accumulated into a chunk, and then written as a single transaction.
+      The chunk size controls how many items are processed before a commit.
+    category: Processing Pattern
+    relatedTerms: [ItemReader, ItemProcessor, ItemWriter, ChunkSize]
+
+  - term: ItemReader
+    definition: >-
+      An abstraction for providing data from an external source. An ItemReader
+      returns one item at a time. When exhausted, it signals completion by
+      returning null. Implementations include FlatFileItemReader, JdbcCursorItemReader,
+      JsonItemReader, and JpaPagingItemReader.
+    category: Processing Component
+    relatedTerms: [Chunk-Oriented Processing, ItemProcessor, ItemWriter]
+
+  - term: ItemProcessor
+    definition: >-
+      An optional abstraction for applying business logic or transformations to
+      items before they are written. An ItemProcessor can return null to filter
+      an item from the output. Processors are composable via CompositeItemProcessor.
+    category: Processing Component
+    relatedTerms: [ItemReader, ItemWriter, FilterCount]
+
+  - term: ItemWriter
+    definition: >-
+      An abstraction for outputting a batch of items. Unlike ItemReader which
+      reads one at a time, ItemWriter receives a list (chunk) of items to write
+      in a single call. Implementations include FlatFileItemWriter, JdbcBatchItemWriter,
+      and MongoItemWriter.
+    category: Processing Component
+    relatedTerms: [ItemReader, ItemProcessor, Chunk-Oriented Processing]
+
+  - term: Tasklet
+    definition: >-
+      A simpler alternative to chunk-oriented processing for steps that perform
+      a single task (e.g., calling a stored procedure, archiving a file). A
+      Tasklet's execute method is called repeatedly until it returns
+      RepeatStatus.FINISHED or throws an exception.
+    category: Processing Pattern
+    relatedTerms: [Step, Chunk-Oriented Processing]
+
+  # Fault Tolerance
+  - term: Skip
+    definition: >-
+      A fault-tolerance mechanism allowing Spring Batch to skip individual items
+      that cause exceptions during reading, processing, or writing. Configured
+      with a skip limit and a list of skippable exception types.
+    category: Fault Tolerance
+    relatedTerms: [SkipCount, Retry, FaultTolerantStepBuilder]
+
+  - term: Retry
+    definition: >-
+      A fault-tolerance mechanism allowing Spring Batch to retry failed items
+      a configurable number of times before failing the step. Configured with
+      a retry limit and retryable exception types.
+    category: Fault Tolerance
+    relatedTerms: [Skip, RetryPolicy, FaultTolerantStepBuilder]
+
+  - term: Restart
+    definition: >-
+      The ability to resume a failed or stopped batch job from the point of
+      failure rather than from the beginning. Spring Batch supports restart by
+      persisting execution state in the JobRepository.
+    category: Fault Tolerance
+    relatedTerms: [JobRepository, ExecutionContext, JobInstance]
+
+  # Status Concepts
+  - term: BatchStatus
+    definition: >-
+      An enumeration indicating the current state of a Job or Step execution.
+      Values: COMPLETED, STARTING, STARTED, STOPPING, STOPPED, FAILED,
+      ABANDONED, UNKNOWN.
+    category: Status
+    values: [COMPLETED, STARTING, STARTED, STOPPING, STOPPED, FAILED, ABANDONED, UNKNOWN]
+
+  - term: ExitStatus
+    definition: >-
+      Represents the exit state of a Step or Job execution with an exit code
+      and optional description. Unlike BatchStatus (which is Spring Batch
+      internal), ExitStatus can be customized by the application.
+    category: Status
+    relatedTerms: [BatchStatus, Step, JobExecution]
+
+  # Metrics (Spring Batch 5.1 Micrometer integration)
+  - term: spring.batch.job.duration
+    definition: >-
+      Micrometer timer metric measuring the total duration of a Spring Batch
+      job execution. Tagged with job.name and job.status.
+    category: Metric
+    relatedTerms: [spring.batch.step.duration, Micrometer]
+
+  - term: spring.batch.step.duration
+    definition: >-
+      Micrometer timer metric measuring the duration of a single step execution.
+      Tagged with job.name, step.name, and step.type.
+    category: Metric
+    relatedTerms: [spring.batch.job.duration, StepExecution]
+
+  - term: spring.batch.chunk.size
+    definition: >-
+      Micrometer counter or gauge metric for the configured chunk size of
+      chunk-oriented steps.
+    category: Metric
+    relatedTerms: [Chunk-Oriented Processing, spring.batch.step.duration]
+
+  # Spring Batch 5.1 New Features
+  - term: Virtual Thread Support
+    definition: >-
+      Spring Batch 5.1 supports Java 21 virtual threads for step execution,
+      enabling highly concurrent batch processing without blocking OS threads.
+      Configure via VirtualThreadTaskExecutor.
+    category: Feature (5.1)
+    relatedTerms: [Step, TaskExecutor]
+
+  - term: Micrometer Integration
+    definition: >-
+      Spring Batch 5.1 provides built-in Micrometer metrics for job and step
+      execution timing, item counts, and error rates. Metrics are automatically
+      registered when Micrometer is on the classpath.
+    category: Feature (5.1)
+    relatedTerms: [spring.batch.job.duration, spring.batch.step.duration]
+
+  - term: Remote Partitioning
+    definition: >-
+      A scaling pattern where a manager step partitions the data and delegates
+      work to worker steps running on remote nodes via Spring Integration
+      messaging.
+    category: Scaling Pattern
+    relatedTerms: [Remote Chunking, Spring Integration, Partitioner]
+
+  - term: Remote Chunking
+    definition: >-
+      A scaling pattern where reading is done by a manager step and chunk
+      processing/writing is delegated to remote worker nodes via messaging.
+    category: Scaling Pattern
+    relatedTerms: [Remote Partitioning, Spring Integration, ChunkProvider]

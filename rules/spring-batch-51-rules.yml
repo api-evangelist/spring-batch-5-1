@@ -1,0 +1,83 @@
+extends: spectral:oas
+rules:
+  spring-batch-actuator-path-prefix:
+    description: All Spring Batch Actuator paths must be prefixed with /actuator or reflect the configured management base path.
+    message: "{{description}}"
+    severity: warn
+    given: "$.paths[*]~"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^\\/"
+
+  spring-batch-operation-tags-required:
+    description: All operations must have at least one tag for grouping in the Batch Actuator API.
+    message: "Operation '{{property}}' must have at least one tag."
+    severity: error
+    given: "$.paths[*][get,post,put,delete,patch]"
+    then:
+      field: tags
+      function: truthy
+
+  spring-batch-operationid-required:
+    description: All operations in the Spring Batch Actuator API must have an operationId.
+    message: "OperationId is required for every operation."
+    severity: error
+    given: "$.paths[*][get,post,put,delete,patch]"
+    then:
+      field: operationId
+      function: truthy
+
+  spring-batch-operationid-camelcase:
+    description: OperationIds must use camelCase to match Spring Batch conventions.
+    message: "OperationId '{{value}}' must use camelCase."
+    severity: warn
+    given: "$.paths[*][get,post,put,delete,patch].operationId"
+    then:
+      function: pattern
+      functionOptions:
+        match: "^[a-z][a-zA-Z0-9]*$"
+
+  spring-batch-response-200-required:
+    description: All GET operations must define a 200 response.
+    message: "GET operation must define a 200 OK response."
+    severity: error
+    given: "$.paths[*].get.responses"
+    then:
+      field: "200"
+      function: truthy
+
+  spring-batch-schema-description:
+    description: All named schemas should have a description to support batch domain documentation.
+    message: "Schema '{{property}}' is missing a description."
+    severity: warn
+    given: "$.components.schemas[*]"
+    then:
+      field: description
+      function: truthy
+
+  spring-batch-status-enum:
+    description: Batch status fields should use the standard Spring Batch status enum values.
+    message: "Status field should use Spring Batch BatchStatus values."
+    severity: info
+    given: "$.components.schemas[*].properties.status"
+    then:
+      field: enum
+      function: truthy
+
+  spring-batch-pagination-consistency:
+    description: Paginated responses should include page, size, totalElements, and totalPages.
+    message: "Paginated response schema should include page, size, totalElements, and totalPages."
+    severity: warn
+    given: "$.components.schemas[?(@.description =~ /[Pp]aginated/)]"
+    then:
+      field: properties
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required:
+            - page
+            - size
+            - totalElements
+            - totalPages

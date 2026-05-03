@@ -1,0 +1,65 @@
+{
+  "title": "Spring Batch 5.1 Job Execution Structure",
+  "description": "Hierarchical structure of the Spring Batch 5.1 domain model centered on job executions. Shows the relationship between jobs, instances, executions, steps, and execution context.",
+  "structure": {
+    "JobExecution": {
+      "description": "Root domain object representing a single run of a batch job.",
+      "fields": {
+        "id": "Long — unique execution identifier",
+        "jobInstance": "JobInstance — the associated job instance",
+        "jobParameters": "JobParameters — typed parameters for this execution",
+        "status": "BatchStatus enum — COMPLETED, FAILED, STARTED, etc.",
+        "exitStatus": "ExitStatus — exit code and description",
+        "startTime": "LocalDateTime — execution start timestamp",
+        "endTime": "LocalDateTime — execution end timestamp (null if running)",
+        "createTime": "LocalDateTime — record creation timestamp",
+        "lastUpdated": "LocalDateTime — last modification timestamp",
+        "stepExecutions": "Collection<StepExecution> — all step runs",
+        "executionContext": "ExecutionContext — persisted job-level state",
+        "failureExceptions": "List<Throwable> — exceptions that caused failure",
+        "version": "Integer — optimistic locking version"
+      },
+      "children": {
+        "JobInstance": {
+          "description": "Uniquely identifies a job by name and parameters.",
+          "fields": {
+            "id": "Long — unique instance identifier",
+            "jobName": "String — Spring Batch job name",
+            "instanceId": "Long — synonym for id"
+          }
+        },
+        "StepExecution": {
+          "description": "Represents the execution of a single step within the job.",
+          "fields": {
+            "id": "Long — unique step execution identifier",
+            "stepName": "String — step name",
+            "status": "BatchStatus enum",
+            "exitStatus": "ExitStatus — exit code and description",
+            "readCount": "int — items successfully read",
+            "writeCount": "int — items successfully written",
+            "commitCount": "int — number of chunk commits",
+            "rollbackCount": "int — number of chunk rollbacks",
+            "readSkipCount": "int — items skipped during read",
+            "processSkipCount": "int — items skipped during process",
+            "writeSkipCount": "int — items skipped during write",
+            "filterCount": "int — items filtered by processor",
+            "startTime": "LocalDateTime — step start time",
+            "endTime": "LocalDateTime — step end time",
+            "executionContext": "ExecutionContext — persisted step-level state",
+            "skippedItems": "List<Throwable> — exceptions for skipped items",
+            "version": "Integer — optimistic locking version"
+          },
+          "children": {
+            "ExecutionContext": {
+              "description": "Key-value store persisted to the job repository for restart support.",
+              "fields": {
+                "dirty": "boolean — whether context has unsaved changes",
+                "entrySet": "Set<Map.Entry<String, Object>> — all context entries"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

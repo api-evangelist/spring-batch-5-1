@@ -1,0 +1,56 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "http://localhost:8080/actuator/batch/jobs/importUserJob/executions?page=0&size=10",
+    "headers": {
+      "Accept": "application/json"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "content": [
+        {
+          "id": 42,
+          "jobId": 37,
+          "jobName": "importUserJob",
+          "startTime": "2026-05-02T08:00:00Z",
+          "endTime": "2026-05-02T08:02:45Z",
+          "status": "COMPLETED",
+          "exitCode": "COMPLETED",
+          "exitDescription": "",
+          "jobParameters": {
+            "run.id": "42",
+            "input.file": "data/users-2026-05-02.csv"
+          },
+          "stepExecutions": [
+            {
+              "id": 98,
+              "stepName": "importStep",
+              "status": "COMPLETED",
+              "readCount": 5000,
+              "writeCount": 4987,
+              "commitCount": 50,
+              "rollbackCount": 0,
+              "readSkipCount": 2,
+              "processSkipCount": 0,
+              "writeSkipCount": 11,
+              "filterCount": 0,
+              "startTime": "2026-05-02T08:00:01Z",
+              "endTime": "2026-05-02T08:02:44Z",
+              "exitCode": "COMPLETED",
+              "exitDescription": ""
+            }
+          ]
+        }
+      ],
+      "page": 0,
+      "size": 10,
+      "totalElements": 1,
+      "totalPages": 1
+    }
+  }
+}

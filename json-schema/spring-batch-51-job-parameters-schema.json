@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spring.io/schema/batch/5.1/job-parameters",
+  "title": "Spring Batch Job Parameters",
+  "description": "Job parameters uniquely identify a job instance in Spring Batch 5.1. Parameters are typed (string, long, double, date) and can be identifying or non-identifying.",
+  "type": "object",
+  "additionalProperties": {
+    "$ref": "#/$defs/JobParameter"
+  },
+  "example": {
+    "run.id": {
+      "value": "1",
+      "type": "LONG",
+      "identifying": true
+    },
+    "input.file": {
+      "value": "data/users-2026-05-02.csv",
+      "type": "STRING",
+      "identifying": true
+    }
+  },
+  "$defs": {
+    "JobParameter": {
+      "title": "Job Parameter",
+      "description": "A single typed job parameter value. Spring Batch 5.1 supports STRING, LONG, DOUBLE, and DATE parameter types.",
+      "type": "object",
+      "properties": {
+        "value": {
+          "description": "The parameter value (serialized as string regardless of type).",
+          "oneOf": [
+            { "type": "string" },
+            { "type": "number" }
+          ]
+        },
+        "type": {
+          "type": "string",
+          "description": "The Java type of this parameter.",
+          "enum": ["STRING", "LONG", "DOUBLE", "DATE"]
+        },
+        "identifying": {
+          "type": "boolean",
+          "description": "Whether this parameter contributes to uniquely identifying a job instance. Non-identifying parameters do not affect the job instance identity.",
+          "default": true
+        }
+      },
+      "required": ["value", "type"]
+    }
+  }
+}

@@ -1,0 +1,165 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://spring.io/schema/batch/5.1/job-execution",
+  "title": "Spring Batch Job Execution",
+  "description": "Represents the execution of a Spring Batch job instance. Contains all metadata about a single run of a job including timing, status, and step execution details.",
+  "type": "object",
+  "properties": {
+    "id": {
+      "type": "integer",
+      "description": "Unique identifier for this job execution.",
+      "format": "int64"
+    },
+    "jobId": {
+      "type": "integer",
+      "description": "Identifier of the job instance this execution belongs to.",
+      "format": "int64"
+    },
+    "jobName": {
+      "type": "string",
+      "description": "Name of the job being executed.",
+      "example": "importUserJob"
+    },
+    "startTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the job execution started."
+    },
+    "endTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when the job execution ended. Null if still running."
+    },
+    "status": {
+      "type": "string",
+      "description": "Current batch status of the job execution.",
+      "enum": ["COMPLETED", "STARTING", "STARTED", "STOPPING", "STOPPED", "FAILED", "ABANDONED", "UNKNOWN"]
+    },
+    "exitCode": {
+      "type": "string",
+      "description": "Exit code indicating the final state. Typically COMPLETED, FAILED, or a custom exit code.",
+      "example": "COMPLETED"
+    },
+    "exitDescription": {
+      "type": "string",
+      "description": "Human-readable description of the exit condition, including any exception messages."
+    },
+    "jobParameters": {
+      "type": "object",
+      "description": "Parameters used to identify and parameterize this job execution.",
+      "additionalProperties": {
+        "type": "string"
+      },
+      "example": {
+        "run.id": "1",
+        "input.file": "data/users-2026-05-02.csv"
+      }
+    },
+    "stepExecutions": {
+      "type": "array",
+      "description": "List of step execution records for each step run during this job execution.",
+      "items": {
+        "$ref": "#/$defs/StepExecution"
+      }
+    },
+    "createTime": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp when this job execution record was created in the job repository."
+    },
+    "lastUpdated": {
+      "type": "string",
+      "format": "date-time",
+      "description": "Timestamp of the most recent update to this execution record."
+    },
+    "version": {
+      "type": "integer",
+      "description": "Optimistic locking version number for the job execution record."
+    }
+  },
+  "required": ["id", "jobName", "status"],
+  "$defs": {
+    "StepExecution": {
+      "title": "Step Execution",
+      "description": "Represents the execution of a single step within a job execution.",
+      "type": "object",
+      "properties": {
+        "id": {
+          "type": "integer",
+          "format": "int64",
+          "description": "Unique identifier for this step execution."
+        },
+        "stepName": {
+          "type": "string",
+          "description": "Name of the step.",
+          "example": "importStep"
+        },
+        "status": {
+          "type": "string",
+          "description": "Current batch status of the step execution.",
+          "enum": ["COMPLETED", "STARTING", "STARTED", "STOPPING", "STOPPED", "FAILED", "ABANDONED", "UNKNOWN"]
+        },
+        "readCount": {
+          "type": "integer",
+          "description": "Number of items successfully read.",
+          "minimum": 0
+        },
+        "writeCount": {
+          "type": "integer",
+          "description": "Number of items successfully written.",
+          "minimum": 0
+        },
+        "commitCount": {
+          "type": "integer",
+          "description": "Number of chunk commits.",
+          "minimum": 0
+        },
+        "rollbackCount": {
+          "type": "integer",
+          "description": "Number of chunk rollbacks.",
+          "minimum": 0
+        },
+        "readSkipCount": {
+          "type": "integer",
+          "description": "Number of items skipped during reading.",
+          "minimum": 0
+        },
+        "processSkipCount": {
+          "type": "integer",
+          "description": "Number of items skipped during processing.",
+          "minimum": 0
+        },
+        "writeSkipCount": {
+          "type": "integer",
+          "description": "Number of items skipped during writing.",
+          "minimum": 0
+        },
+        "filterCount": {
+          "type": "integer",
+          "description": "Number of items filtered by an ItemProcessor returning null.",
+          "minimum": 0
+        },
+        "startTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when this step execution started."
+        },
+        "endTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp when this step execution ended."
+        },
+        "exitCode": {
+          "type": "string",
+          "description": "Exit code for the step execution.",
+          "example": "COMPLETED"
+        },
+        "exitDescription": {
+          "type": "string",
+          "description": "Exit description message for the step."
+        }
+      },
+      "required": ["id", "stepName", "status"]
+    }
+  }
+}

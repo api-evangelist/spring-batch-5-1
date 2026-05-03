@@ -1,0 +1,44 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "http://localhost:8080/actuator/metrics/spring.batch.job.duration?tag=job.name:importUserJob&tag=job.status:COMPLETED",
+    "headers": {
+      "Accept": "application/json"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "name": "spring.batch.job.duration",
+      "description": "Duration of Spring Batch job execution",
+      "baseUnit": "seconds",
+      "measurements": [
+        {
+          "statistic": "COUNT",
+          "value": 42
+        },
+        {
+          "statistic": "TOTAL",
+          "value": 6840.5
+        },
+        {
+          "statistic": "MAX",
+          "value": 420.3
+        }
+      ],
+      "availableTags": [
+        {
+          "tag": "job.name",
+          "values": ["importUserJob", "exportReportJob", "cleanupJob"]
+        },
+        {
+          "tag": "job.status",
+          "values": ["COMPLETED", "FAILED", "STOPPED"]
+        }
+      ]
+    }
+  }
+}

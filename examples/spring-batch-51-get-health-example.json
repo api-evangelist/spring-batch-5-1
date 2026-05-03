@@ -1,0 +1,40 @@
+{
+  "request": {
+    "method": "GET",
+    "url": "http://localhost:8080/actuator/health",
+    "headers": {
+      "Accept": "application/json"
+    }
+  },
+  "response": {
+    "status": 200,
+    "headers": {
+      "Content-Type": "application/json"
+    },
+    "body": {
+      "status": "UP",
+      "components": {
+        "db": {
+          "status": "UP",
+          "details": {
+            "database": "H2",
+            "validationQuery": "isValid()"
+          }
+        },
+        "diskSpace": {
+          "status": "UP",
+          "details": {
+            "total": 499963174912,
+            "free": 309803892736,
+            "threshold": 10485760,
+            "path": "/app/.",
+            "exists": true
+          }
+        },
+        "ping": {
+          "status": "UP"
+        }
+      }
+    }
+  }
+}

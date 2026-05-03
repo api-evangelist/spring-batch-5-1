@@ -1,0 +1,45 @@
+{
+  "@context": {
+    "@vocab": "https://spring.io/batch/5.1/",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "schema": "https://schema.org/",
+    "batch": "https://spring.io/batch/5.1/",
+
+    "JobExecution": "batch:JobExecution",
+    "JobInstance": "batch:JobInstance",
+    "StepExecution": "batch:StepExecution",
+    "ExecutionContext": "batch:ExecutionContext",
+    "JobParameters": "batch:JobParameters",
+    "JobParameter": "batch:JobParameter",
+
+    "id": { "@id": "schema:identifier", "@type": "xsd:long" },
+    "jobName": { "@id": "batch:jobName", "@type": "xsd:string" },
+    "jobId": { "@id": "batch:jobId", "@type": "xsd:long" },
+    "stepName": { "@id": "batch:stepName", "@type": "xsd:string" },
+    "status": { "@id": "batch:status", "@type": "xsd:string" },
+    "exitCode": { "@id": "batch:exitCode", "@type": "xsd:string" },
+    "exitDescription": { "@id": "batch:exitDescription", "@type": "xsd:string" },
+
+    "startTime": { "@id": "batch:startTime", "@type": "xsd:dateTime" },
+    "endTime": { "@id": "batch:endTime", "@type": "xsd:dateTime" },
+    "createTime": { "@id": "batch:createTime", "@type": "xsd:dateTime" },
+    "lastUpdated": { "@id": "batch:lastUpdated", "@type": "xsd:dateTime" },
+
+    "readCount": { "@id": "batch:readCount", "@type": "xsd:integer" },
+    "writeCount": { "@id": "batch:writeCount", "@type": "xsd:integer" },
+    "commitCount": { "@id": "batch:commitCount", "@type": "xsd:integer" },
+    "rollbackCount": { "@id": "batch:rollbackCount", "@type": "xsd:integer" },
+    "readSkipCount": { "@id": "batch:readSkipCount", "@type": "xsd:integer" },
+    "processSkipCount": { "@id": "batch:processSkipCount", "@type": "xsd:integer" },
+    "writeSkipCount": { "@id": "batch:writeSkipCount", "@type": "xsd:integer" },
+    "filterCount": { "@id": "batch:filterCount", "@type": "xsd:integer" },
+
+    "jobParameters": { "@id": "batch:jobParameters", "@type": "@id" },
+    "stepExecutions": { "@id": "batch:stepExecutions", "@type": "@id", "@container": "@set" },
+    "executionContext": { "@id": "batch:executionContext", "@type": "@id" },
+
+    "version": { "@id": "batch:version", "@type": "xsd:integer" },
+    "identifying": { "@id": "batch:identifying", "@type": "xsd:boolean" },
+    "parameterType": { "@id": "batch:parameterType", "@type": "xsd:string" }
+  }
+}

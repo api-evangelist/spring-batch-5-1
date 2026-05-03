@@ -1,0 +1,213 @@
+naftiko: "1.0.0-alpha1"
+
+info:
+  label: "Spring Batch 5.1 Job Monitoring"
+  description: >-
+    Workflow capability for monitoring and observing Spring Batch 5.1 job
+    executions. Combines Actuator health, Micrometer metrics, and job execution
+    history into a unified monitoring interface for platform operators and
+    batch administrators.
+  tags:
+    - Spring Batch
+    - Batch Processing
+    - Monitoring
+    - Observability
+    - Job Management
+  created: "2026-05-02"
+  modified: "2026-05-02"
+
+binds:
+  - namespace: env
+    keys:
+      SPRING_BATCH_ACTUATOR_BASE_URL: SPRING_BATCH_ACTUATOR_BASE_URL
+
+capability:
+  consumes:
+    - import: spring-batch-actuator
+      location: ./shared/spring-batch-51-actuator.yaml
+
+  exposes:
+    - type: rest
+      port: 8080
+      namespace: batch-monitoring-api
+      description: "Unified REST API for Spring Batch 5.1 job monitoring and observability."
+      resources:
+        - path: /v1/health
+          name: health
+          description: "Application and batch component health status"
+          operations:
+            - method: GET
+              name: get-health
+              description: "Get overall application health including batch components"
+              call: "spring-batch-actuator.get-health"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/metrics
+          name: metrics
+          description: "Micrometer metrics for batch performance tracking"
+          operations:
+            - method: GET
+              name: list-metrics
+              description: "List all available batch metrics"
+              call: "spring-batch-actuator.list-metrics"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/metrics/{metricName}
+          name: metric-detail
+          description: "Single metric measurements with tag filtering"
+          operations:
+            - method: GET
+              name: get-metric
+              description: "Get measurements for a named batch metric"
+              call: "spring-batch-actuator.get-metric"
+              with:
+                metricName: "rest.metricName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/jobs
+          name: jobs
+          description: "Registered Spring Batch jobs"
+          operations:
+            - method: GET
+              name: list-jobs
+              description: "List all registered batch jobs"
+              call: "spring-batch-actuator.list-batch-jobs"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/jobs/{jobName}
+          name: job-detail
+          description: "Individual job details"
+          operations:
+            - method: GET
+              name: get-job
+              description: "Get details for a specific batch job"
+              call: "spring-batch-actuator.get-batch-job"
+              with:
+                jobName: "rest.jobName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/jobs/{jobName}/executions
+          name: job-executions
+          description: "Job execution history"
+          operations:
+            - method: GET
+              name: list-executions
+              description: "List execution history for a batch job"
+              call: "spring-batch-actuator.list-job-executions"
+              with:
+                jobName: "rest.jobName"
+                page: "rest.page"
+                size: "rest.size"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+        - path: /v1/jobs/{jobName}/instances
+          name: job-instances
+          description: "Job instances for a specific job"
+          operations:
+            - method: GET
+              name: list-instances
+              description: "List job instances by job name"
+              call: "spring-batch-actuator.list-job-instances"
+              with:
+                jobName: "rest.jobName"
+              outputParameters:
+                - type: object
+                  mapping: "$."
+
+    - type: mcp
+      port: 9090
+      namespace: batch-monitoring-mcp
+      transport: http
+      description: "MCP server for AI-assisted Spring Batch 5.1 job monitoring and diagnosis."
+      tools:
+        - name: check-batch-health
+          description: "Check the health of the Spring Batch application and its database connection"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "spring-batch-actuator.get-health"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-batch-metrics
+          description: "List all available Spring Batch Micrometer metrics names"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "spring-batch-actuator.list-metrics"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-batch-metric
+          description: "Get current measurements for a Spring Batch metric such as job duration, step duration, or item counts"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "spring-batch-actuator.get-metric"
+          with:
+            metricName: "tools.metricName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-jobs
+          description: "List all registered Spring Batch jobs with their last execution status"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "spring-batch-actuator.list-batch-jobs"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: get-job-details
+          description: "Get configuration and last execution details for a named Spring Batch job"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "spring-batch-actuator.get-batch-job"
+          with:
+            jobName: "tools.jobName"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-job-executions
+          description: "List execution history for a Spring Batch job including status, timing, and step statistics"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "spring-batch-actuator.list-job-executions"
+          with:
+            jobName: "tools.jobName"
+            page: "tools.page"
+            size: "tools.size"
+          outputParameters:
+            - type: object
+              mapping: "$."
+
+        - name: list-job-instances
+          description: "List job instances for a Spring Batch job (each instance represents a unique set of parameters)"
+          hints:
+            readOnly: true
+            openWorld: true
+          call: "spring-batch-actuator.list-job-instances"
+          with:
+            jobName: "tools.jobName"
+          outputParameters:
+            - type: object
+              mapping: "$."
