@@ -8,7 +8,7 @@ description: >-
   processing with improved fault tolerance.
 image: https://spring.io/img/projects/spring-batch.svg
 url: https://spring.io/projects/spring-batch
-type: opensource
+kind: opensource
 created: '2025-01-01'
 modified: '2026-05-02'
 specificationVersion: '0.18'
@@ -39,7 +39,7 @@ apis:
         url: https://docs.spring.io/spring-batch/docs/5.1.x/reference/html/
       - type: API Documentation
         url: https://docs.spring.io/spring-batch/docs/5.1.x/api/
-      - type: GitHub Repository
+      - type: GitHubRepository
         url: https://github.com/spring-projects/spring-batch
       - type: Getting Started Guide
         url: https://spring.io/guides/gs/batch-processing/
@@ -47,13 +47,13 @@ apis:
         url: https://docs.spring.io/spring-batch/docs/5.1.x/reference/html/index-single.html
       - type: Samples
         url: https://github.com/spring-projects/spring-batch/tree/main/spring-batch-samples
-      - type: Release Notes
+      - type: ReleaseNotes
         url: https://github.com/spring-projects/spring-batch/releases/tag/5.1.0
       - type: Maven Central
         url: https://mvnrepository.com/artifact/org.springframework.batch/spring-batch-core/5.1.0
       - type: Migration Guide
         url: https://github.com/spring-projects/spring-batch/wiki/Spring-Batch-5.0-Migration-Guide
-      - type: Changelog
+      - type: ChangeLog
         url: https://github.com/spring-projects/spring-batch/blob/main/CHANGELOG.md
       - type: OpenAPI
         url: openapi/spring-batch-51-openapi.yml
@@ -99,7 +99,7 @@ maintainers:
 common:
   - type: Blog
     url: https://spring.io/blog/category/spring-batch
-  - type: Stack Overflow
+  - type: StackOverflow
     url: https://stackoverflow.com/questions/tagged/spring-batch
   - type: GitHub Issues
     url: https://github.com/spring-projects/spring-batch/issues
