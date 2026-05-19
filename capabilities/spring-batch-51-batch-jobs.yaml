@@ -1,0 +1,215 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Spring Batch 5.1 Actuator API — Batch Jobs
+  description: 'Spring Batch 5.1 Actuator API — Batch Jobs. 4 operations. Lead operation: List Batch Jobs. Self-contained
+    Naftiko capability covering one Spring Batch 5 1 business surface.'
+  tags:
+  - Spring Batch 5 1
+  - Batch Jobs
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SPRING_BATCH_5_1_API_KEY: SPRING_BATCH_5_1_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: spring-batch-51-batch-jobs
+    baseUri: http://localhost:8080/actuator
+    description: Spring Batch 5.1 Actuator API — Batch Jobs business capability. Self-contained, no shared references.
+    resources:
+    - name: batch-jobs
+      path: /batch/jobs
+      operations:
+      - name: listbatchjobs
+        method: GET
+        description: List Batch Jobs
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: batch-jobs-jobName
+      path: /batch/jobs/{jobName}
+      operations:
+      - name: getbatchjob
+        method: GET
+        description: Get Batch Job Details
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: jobName
+          in: path
+          type: string
+          description: Name of the batch job
+          required: true
+    - name: batch-jobs-jobName-executions
+      path: /batch/jobs/{jobName}/executions
+      operations:
+      - name: listjobexecutions
+        method: GET
+        description: List Job Executions
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: jobName
+          in: path
+          type: string
+          description: Name of the batch job
+          required: true
+        - name: page
+          in: query
+          type: integer
+          description: Page number (zero-based)
+        - name: size
+          in: query
+          type: integer
+          description: Number of executions per page
+    - name: batch-jobs-jobName-instances
+      path: /batch/jobs/{jobName}/instances
+      operations:
+      - name: listjobinstances
+        method: GET
+        description: List Job Instances
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: jobName
+          in: path
+          type: string
+          description: Name of the batch job
+          required: true
+        - name: page
+          in: query
+          type: integer
+        - name: size
+          in: query
+          type: integer
+  exposes:
+  - type: rest
+    namespace: spring-batch-51-batch-jobs-rest
+    port: 8080
+    description: REST adapter for Spring Batch 5.1 Actuator API — Batch Jobs. One Spectral-compliant resource per consumed
+      operation, prefixed with /v1.
+    resources:
+    - path: /v1/batch/jobs
+      name: batch-jobs
+      description: REST surface for batch-jobs.
+      operations:
+      - method: GET
+        name: listbatchjobs
+        description: List Batch Jobs
+        call: spring-batch-51-batch-jobs.listbatchjobs
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/batch/jobs/{jobname}
+      name: batch-jobs-jobname
+      description: REST surface for batch-jobs-jobName.
+      operations:
+      - method: GET
+        name: getbatchjob
+        description: Get Batch Job Details
+        call: spring-batch-51-batch-jobs.getbatchjob
+        with:
+          jobName: rest.jobName
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/batch/jobs/{jobname}/executions
+      name: batch-jobs-jobname-executions
+      description: REST surface for batch-jobs-jobName-executions.
+      operations:
+      - method: GET
+        name: listjobexecutions
+        description: List Job Executions
+        call: spring-batch-51-batch-jobs.listjobexecutions
+        with:
+          jobName: rest.jobName
+          page: rest.page
+          size: rest.size
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/batch/jobs/{jobname}/instances
+      name: batch-jobs-jobname-instances
+      description: REST surface for batch-jobs-jobName-instances.
+      operations:
+      - method: GET
+        name: listjobinstances
+        description: List Job Instances
+        call: spring-batch-51-batch-jobs.listjobinstances
+        with:
+          jobName: rest.jobName
+          page: rest.page
+          size: rest.size
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: spring-batch-51-batch-jobs-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Spring Batch 5.1 Actuator API — Batch Jobs. One tool per consumed operation, routed inline
+      through this capability's consumes block.
+    tools:
+    - name: list-batch-jobs
+      description: List Batch Jobs
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: spring-batch-51-batch-jobs.listbatchjobs
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-batch-job-details
+      description: Get Batch Job Details
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: spring-batch-51-batch-jobs.getbatchjob
+      with:
+        jobName: tools.jobName
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-job-executions
+      description: List Job Executions
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: spring-batch-51-batch-jobs.listjobexecutions
+      with:
+        jobName: tools.jobName
+        page: tools.page
+        size: tools.size
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: list-job-instances
+      description: List Job Instances
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: spring-batch-51-batch-jobs.listjobinstances
+      with:
+        jobName: tools.jobName
+        page: tools.page
+        size: tools.size
+      outputParameters:
+      - type: object
+        mapping: $.

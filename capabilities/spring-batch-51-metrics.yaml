@@ -1,0 +1,115 @@
+naftiko: 1.0.0-alpha2
+info:
+  label: Spring Batch 5.1 Actuator API — Metrics
+  description: 'Spring Batch 5.1 Actuator API — Metrics. 2 operations. Lead operation: List Available Metrics. Self-contained
+    Naftiko capability covering one Spring Batch 5 1 business surface.'
+  tags:
+  - Spring Batch 5 1
+  - Metrics
+  created: '2026-05-19'
+  modified: '2026-05-19'
+binds:
+- namespace: env
+  keys:
+    SPRING_BATCH_5_1_API_KEY: SPRING_BATCH_5_1_API_KEY
+capability:
+  consumes:
+  - type: http
+    namespace: spring-batch-51-metrics
+    baseUri: http://localhost:8080/actuator
+    description: Spring Batch 5.1 Actuator API — Metrics business capability. Self-contained, no shared references.
+    resources:
+    - name: metrics
+      path: /metrics
+      operations:
+      - name: listmetrics
+        method: GET
+        description: List Available Metrics
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+    - name: metrics-metricName
+      path: /metrics/{metricName}
+      operations:
+      - name: getmetric
+        method: GET
+        description: Get Metric Value
+        outputRawFormat: json
+        outputParameters:
+        - name: result
+          type: object
+          value: $.
+        inputParameters:
+        - name: metricName
+          in: path
+          type: string
+          description: Name of the metric (e.g., spring.batch.job.duration, spring.batch.step.duration, spring.batch.chunk.size)
+          required: true
+        - name: tag
+          in: query
+          type: string
+          description: Tag filter in the form name:value (can be repeated)
+  exposes:
+  - type: rest
+    namespace: spring-batch-51-metrics-rest
+    port: 8080
+    description: REST adapter for Spring Batch 5.1 Actuator API — Metrics. One Spectral-compliant resource per consumed operation,
+      prefixed with /v1.
+    resources:
+    - path: /v1/metrics
+      name: metrics
+      description: REST surface for metrics.
+      operations:
+      - method: GET
+        name: listmetrics
+        description: List Available Metrics
+        call: spring-batch-51-metrics.listmetrics
+        outputParameters:
+        - type: object
+          mapping: $.
+    - path: /v1/metrics/{metricname}
+      name: metrics-metricname
+      description: REST surface for metrics-metricName.
+      operations:
+      - method: GET
+        name: getmetric
+        description: Get Metric Value
+        call: spring-batch-51-metrics.getmetric
+        with:
+          metricName: rest.metricName
+          tag: rest.tag
+        outputParameters:
+        - type: object
+          mapping: $.
+  - type: mcp
+    namespace: spring-batch-51-metrics-mcp
+    port: 9090
+    transport: http
+    description: MCP adapter for Spring Batch 5.1 Actuator API — Metrics. One tool per consumed operation, routed inline through
+      this capability's consumes block.
+    tools:
+    - name: list-available-metrics
+      description: List Available Metrics
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: spring-batch-51-metrics.listmetrics
+      outputParameters:
+      - type: object
+        mapping: $.
+    - name: get-metric-value
+      description: Get Metric Value
+      hints:
+        readOnly: true
+        destructive: false
+        idempotent: true
+      call: spring-batch-51-metrics.getmetric
+      with:
+        metricName: tools.metricName
+        tag: tools.tag
+      outputParameters:
+      - type: object
+        mapping: $.
