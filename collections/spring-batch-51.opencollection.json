@@ -1,0 +1,182 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Spring Batch 5.1 Actuator API",
+    "version": "5.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Application Health",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/actuator/health"
+          },
+          "docs": "Returns the health status of the Spring Batch application including database connectivity and batch job health indicators."
+        },
+        {
+          "info": {
+            "name": "Get Batch Health",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/actuator/health/batch"
+          },
+          "docs": "Returns health status specific to Spring Batch, including job repository connectivity and last job execution status."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Metrics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Available Metrics",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/actuator/metrics"
+          },
+          "docs": "Returns a list of all available metric names collected by Micrometer, including Spring Batch job and step metrics."
+        },
+        {
+          "info": {
+            "name": "Get Metric Value",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/actuator/metrics/:metricName",
+            "params": [
+              {
+                "name": "metricName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the metric (e.g., spring.batch.job.duration, spring.batch.step.duration, spring.batch.chunk.size)"
+              },
+              {
+                "name": "tag",
+                "value": "",
+                "type": "query",
+                "description": "Tag filter in the form name:value (can be repeated)"
+              }
+            ]
+          },
+          "docs": "Returns measurements for a specific metric. Spring Batch 5.1 exposes metrics under the spring.batch namespace including job duration, step duration, read count, write count, and skip count."
+        }
+      ]
+    },
+    {
+      "info": {
+        "name": "Batch Jobs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Batch Jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/actuator/batch/jobs"
+          },
+          "docs": "Returns all registered Spring Batch jobs in the application context with their current status and last execution information."
+        },
+        {
+          "info": {
+            "name": "Get Batch Job Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/actuator/batch/jobs/:jobName",
+            "params": [
+              {
+                "name": "jobName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the batch job"
+              }
+            ]
+          },
+          "docs": "Returns details for a specific batch job including its current configuration and execution history summary."
+        },
+        {
+          "info": {
+            "name": "List Job Executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/actuator/batch/jobs/:jobName/executions",
+            "params": [
+              {
+                "name": "jobName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the batch job"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (zero-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Number of executions per page"
+              }
+            ]
+          },
+          "docs": "Returns execution history for a specific batch job, including start time, end time, status, and exit code for each execution."
+        },
+        {
+          "info": {
+            "name": "List Job Instances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/actuator/batch/jobs/:jobName/instances",
+            "params": [
+              {
+                "name": "jobName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the batch job"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns job instances for a specific batch job. Each instance represents a unique set of job parameters."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
