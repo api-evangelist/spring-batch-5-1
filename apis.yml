@@ -54,7 +54,7 @@ apis:
         url: https://github.com/spring-projects/spring-batch/blob/main/CHANGELOG.md
       - type: OpenAPI
         url: openapi/spring-batch-51-openapi.yml
-      - type: Spectral Rules
+      - type: SpectralRules
         url: rules/spring-batch-51-rules.yml
   - name: Spring Batch 5.1 Infrastructure API
     description: >-
@@ -97,9 +97,9 @@ common:
     url: https://spring.io/blog/category/spring-batch
   - type: StackOverflow
     url: https://stackoverflow.com/questions/tagged/spring-batch
-  - type: GitHub Issues
+  - type: GitHubIssues
     url: https://github.com/spring-projects/spring-batch/issues
-  - type: GitHub Discussions
+  - type: GitHubDiscussions
     url: https://github.com/spring-projects/spring-batch/discussions
   - type: License
     url: https://github.com/spring-projects/spring-batch/blob/main/LICENSE
