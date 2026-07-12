@@ -93,6 +93,10 @@ maintainers:
   - FN: Mahmoud Ben Hassine
     X-github: mminella
 common:
+  - type: VulnerabilityDisclosure
+    url: security/spring-batch-5-1-vulnerability-disclosure.yml
+  - type: DomainSecurity
+    url: security/spring-batch-5-1-domain-security.yml
   - type: Blog
     url: https://spring.io/blog/category/spring-batch
   - type: StackOverflow
