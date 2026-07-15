@@ -93,6 +93,8 @@ maintainers:
   - FN: Mahmoud Ben Hassine
     X-github: mminella
 common:
+  - type: AgenticAccess
+    url: agentic-access/spring-batch-5-1-agentic-access.yml
   - type: VulnerabilityDisclosure
     url: security/spring-batch-5-1-vulnerability-disclosure.yml
   - type: DomainSecurity
