@@ -1,0 +1,87 @@
+openapi: 3.1.0
+info:
+  title: Spring Batch 5.1 Actuator Batch Jobs Health API
+  description: Spring Boot Actuator endpoints exposed by Spring Batch 5.1 applications for monitoring and managing batch jobs. Provides health checks, metrics, job execution status, and step execution details via the Spring Boot Actuator infrastructure. These endpoints are available when spring-boot-actuator is on the classpath alongside spring-batch-core.
+  version: 5.1.0
+  contact:
+    name: Spring Team
+    url: https://spring.io/team
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: http://localhost:8080/actuator
+  description: Local Spring Boot application with Actuator enabled
+tags:
+- name: Health
+  description: Application and component health checks
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Get Application Health
+      description: Returns the health status of the Spring Batch application including database connectivity and batch job health indicators.
+      tags:
+      - Health
+      responses:
+        '200':
+          description: Application is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '503':
+          description: Application is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /health/batch:
+    get:
+      operationId: getBatchHealth
+      summary: Get Batch Health
+      description: Returns health status specific to Spring Batch, including job repository connectivity and last job execution status.
+      tags:
+      - Health
+      responses:
+        '200':
+          description: Batch subsystem is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentHealth'
+components:
+  schemas:
+    ComponentHealth:
+      type: object
+      description: Health status of a single component
+      properties:
+        status:
+          type: string
+          description: Component health status
+          enum:
+          - UP
+          - DOWN
+          - OUT_OF_SERVICE
+          - UNKNOWN
+        details:
+          type: object
+          description: Additional details about the component health
+          additionalProperties: true
+    HealthResponse:
+      type: object
+      description: Overall application health status
+      properties:
+        status:
+          type: string
+          description: Health status
+          enum:
+          - UP
+          - DOWN
+          - OUT_OF_SERVICE
+          - UNKNOWN
+        components:
+          type: object
+          description: Health of individual components
+          additionalProperties:
+            $ref: '#/components/schemas/ComponentHealth'

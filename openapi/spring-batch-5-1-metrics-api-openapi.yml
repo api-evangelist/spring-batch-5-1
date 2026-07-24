@@ -1,0 +1,117 @@
+openapi: 3.1.0
+info:
+  title: Spring Batch 5.1 Actuator Batch Jobs Metrics API
+  description: Spring Boot Actuator endpoints exposed by Spring Batch 5.1 applications for monitoring and managing batch jobs. Provides health checks, metrics, job execution status, and step execution details via the Spring Boot Actuator infrastructure. These endpoints are available when spring-boot-actuator is on the classpath alongside spring-batch-core.
+  version: 5.1.0
+  contact:
+    name: Spring Team
+    url: https://spring.io/team
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+- url: http://localhost:8080/actuator
+  description: Local Spring Boot application with Actuator enabled
+tags:
+- name: Metrics
+  description: Micrometer-based application metrics
+paths:
+  /metrics:
+    get:
+      operationId: listMetrics
+      summary: List Available Metrics
+      description: Returns a list of all available metric names collected by Micrometer, including Spring Batch job and step metrics.
+      tags:
+      - Metrics
+      responses:
+        '200':
+          description: List of available metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsList'
+  /metrics/{metricName}:
+    get:
+      operationId: getMetric
+      summary: Get Metric Value
+      description: Returns measurements for a specific metric. Spring Batch 5.1 exposes metrics under the spring.batch namespace including job duration, step duration, read count, write count, and skip count.
+      tags:
+      - Metrics
+      parameters:
+      - name: metricName
+        in: path
+        required: true
+        description: Name of the metric (e.g., spring.batch.job.duration, spring.batch.step.duration, spring.batch.chunk.size)
+        schema:
+          type: string
+          example: spring.batch.job.duration
+      - name: tag
+        in: query
+        required: false
+        description: Tag filter in the form name:value (can be repeated)
+        schema:
+          type: string
+          example: job.name:importUserJob
+      responses:
+        '200':
+          description: Metric measurements
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricDetail'
+        '404':
+          description: Metric not found
+components:
+  schemas:
+    MetricDetail:
+      type: object
+      description: Detail for a specific metric
+      properties:
+        name:
+          type: string
+          description: Metric name
+        description:
+          type: string
+          description: Human-readable metric description
+        baseUnit:
+          type: string
+          description: Base measurement unit
+        measurements:
+          type: array
+          description: Metric measurements
+          items:
+            type: object
+            properties:
+              statistic:
+                type: string
+                description: Statistic type (COUNT, TOTAL, MAX, VALUE)
+              value:
+                type: number
+                description: Measurement value
+        availableTags:
+          type: array
+          description: Available tag dimensions for filtering
+          items:
+            type: object
+            properties:
+              tag:
+                type: string
+              values:
+                type: array
+                items:
+                  type: string
+    MetricsList:
+      type: object
+      description: List of available metric names
+      properties:
+        names:
+          type: array
+          description: Available metric names
+          items:
+            type: string
+          example:
+          - spring.batch.job.duration
+          - spring.batch.step.duration
+          - spring.batch.chunk.size
+          - spring.batch.item.read
+          - spring.batch.item.write
