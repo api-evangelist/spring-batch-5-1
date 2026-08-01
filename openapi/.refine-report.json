@@ -1,0 +1,18 @@
+{
+  "provider": "spring-batch-5-1",
+  "sources": [
+    "spring-batch-5-1-batch-jobs-api-openapi.yml",
+    "spring-batch-5-1-health-api-openapi.yml",
+    "spring-batch-5-1-metrics-api-openapi.yml"
+  ],
+  "outputs": [
+    "spring-batch-5-1-batch-jobs-api-openapi.yml",
+    "spring-batch-5-1-health-api-openapi.yml",
+    "spring-batch-5-1-metrics-api-openapi.yml"
+  ],
+  "archived": [],
+  "errors": [],
+  "warnings": [],
+  "notes": [],
+  "skipped": []
+}

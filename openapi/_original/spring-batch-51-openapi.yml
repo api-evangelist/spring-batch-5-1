@@ -1,0 +1,535 @@
+openapi: 3.1.0
+info:
+  title: Spring Batch 5.1 Actuator API
+  description: >-
+    Spring Boot Actuator endpoints exposed by Spring Batch 5.1 applications for
+    monitoring and managing batch jobs. Provides health checks, metrics, job
+    execution status, and step execution details via the Spring Boot Actuator
+    infrastructure. These endpoints are available when spring-boot-actuator is
+    on the classpath alongside spring-batch-core.
+  version: 5.1.0
+  contact:
+    name: Spring Team
+    url: https://spring.io/team
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+servers:
+  - url: http://localhost:8080/actuator
+    description: Local Spring Boot application with Actuator enabled
+tags:
+  - name: Batch Jobs
+    description: Batch job execution management and monitoring
+  - name: Health
+    description: Application and component health checks
+  - name: Metrics
+    description: Micrometer-based application metrics
+paths:
+  /health:
+    get:
+      operationId: getHealth
+      summary: Get Application Health
+      description: >-
+        Returns the health status of the Spring Batch application including
+        database connectivity and batch job health indicators.
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Application is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+        '503':
+          description: Application is unhealthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/HealthResponse'
+  /health/batch:
+    get:
+      operationId: getBatchHealth
+      summary: Get Batch Health
+      description: >-
+        Returns health status specific to Spring Batch, including job repository
+        connectivity and last job execution status.
+      tags:
+        - Health
+      responses:
+        '200':
+          description: Batch subsystem is healthy
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/ComponentHealth'
+  /metrics:
+    get:
+      operationId: listMetrics
+      summary: List Available Metrics
+      description: >-
+        Returns a list of all available metric names collected by Micrometer,
+        including Spring Batch job and step metrics.
+      tags:
+        - Metrics
+      responses:
+        '200':
+          description: List of available metrics
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricsList'
+  /metrics/{metricName}:
+    get:
+      operationId: getMetric
+      summary: Get Metric Value
+      description: >-
+        Returns measurements for a specific metric. Spring Batch 5.1 exposes
+        metrics under the spring.batch namespace including job duration,
+        step duration, read count, write count, and skip count.
+      tags:
+        - Metrics
+      parameters:
+        - name: metricName
+          in: path
+          required: true
+          description: >-
+            Name of the metric (e.g., spring.batch.job.duration,
+            spring.batch.step.duration, spring.batch.chunk.size)
+          schema:
+            type: string
+            example: spring.batch.job.duration
+        - name: tag
+          in: query
+          required: false
+          description: Tag filter in the form name:value (can be repeated)
+          schema:
+            type: string
+            example: job.name:importUserJob
+      responses:
+        '200':
+          description: Metric measurements
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MetricDetail'
+        '404':
+          description: Metric not found
+  /batch/jobs:
+    get:
+      operationId: listBatchJobs
+      summary: List Batch Jobs
+      description: >-
+        Returns all registered Spring Batch jobs in the application context
+        with their current status and last execution information.
+      tags:
+        - Batch Jobs
+      responses:
+        '200':
+          description: List of batch jobs
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchJobList'
+  /batch/jobs/{jobName}:
+    get:
+      operationId: getBatchJob
+      summary: Get Batch Job Details
+      description: >-
+        Returns details for a specific batch job including its current
+        configuration and execution history summary.
+      tags:
+        - Batch Jobs
+      parameters:
+        - name: jobName
+          in: path
+          required: true
+          description: Name of the batch job
+          schema:
+            type: string
+            example: importUserJob
+      responses:
+        '200':
+          description: Job details
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/BatchJobDetail'
+        '404':
+          description: Job not found
+  /batch/jobs/{jobName}/executions:
+    get:
+      operationId: listJobExecutions
+      summary: List Job Executions
+      description: >-
+        Returns execution history for a specific batch job, including start time,
+        end time, status, and exit code for each execution.
+      tags:
+        - Batch Jobs
+      parameters:
+        - name: jobName
+          in: path
+          required: true
+          description: Name of the batch job
+          schema:
+            type: string
+            example: importUserJob
+        - name: page
+          in: query
+          required: false
+          description: Page number (zero-based)
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          description: Number of executions per page
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Job execution history
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobExecutionPage'
+  /batch/jobs/{jobName}/instances:
+    get:
+      operationId: listJobInstances
+      summary: List Job Instances
+      description: >-
+        Returns job instances for a specific batch job. Each instance represents
+        a unique set of job parameters.
+      tags:
+        - Batch Jobs
+      parameters:
+        - name: jobName
+          in: path
+          required: true
+          description: Name of the batch job
+          schema:
+            type: string
+        - name: page
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 0
+        - name: size
+          in: query
+          required: false
+          schema:
+            type: integer
+            default: 20
+      responses:
+        '200':
+          description: Job instances
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/JobInstancePage'
+components:
+  schemas:
+    HealthResponse:
+      type: object
+      description: Overall application health status
+      properties:
+        status:
+          type: string
+          description: Health status
+          enum:
+            - UP
+            - DOWN
+            - OUT_OF_SERVICE
+            - UNKNOWN
+        components:
+          type: object
+          description: Health of individual components
+          additionalProperties:
+            $ref: '#/components/schemas/ComponentHealth'
+    ComponentHealth:
+      type: object
+      description: Health status of a single component
+      properties:
+        status:
+          type: string
+          description: Component health status
+          enum:
+            - UP
+            - DOWN
+            - OUT_OF_SERVICE
+            - UNKNOWN
+        details:
+          type: object
+          description: Additional details about the component health
+          additionalProperties: true
+    MetricsList:
+      type: object
+      description: List of available metric names
+      properties:
+        names:
+          type: array
+          description: Available metric names
+          items:
+            type: string
+          example:
+            - spring.batch.job.duration
+            - spring.batch.step.duration
+            - spring.batch.chunk.size
+            - spring.batch.item.read
+            - spring.batch.item.write
+    MetricDetail:
+      type: object
+      description: Detail for a specific metric
+      properties:
+        name:
+          type: string
+          description: Metric name
+        description:
+          type: string
+          description: Human-readable metric description
+        baseUnit:
+          type: string
+          description: Base measurement unit
+        measurements:
+          type: array
+          description: Metric measurements
+          items:
+            type: object
+            properties:
+              statistic:
+                type: string
+                description: Statistic type (COUNT, TOTAL, MAX, VALUE)
+              value:
+                type: number
+                description: Measurement value
+        availableTags:
+          type: array
+          description: Available tag dimensions for filtering
+          items:
+            type: object
+            properties:
+              tag:
+                type: string
+              values:
+                type: array
+                items:
+                  type: string
+    BatchJobList:
+      type: object
+      description: List of registered batch jobs
+      properties:
+        jobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchJobSummary'
+    BatchJobSummary:
+      type: object
+      description: Summary of a batch job
+      properties:
+        name:
+          type: string
+          description: Job name
+          example: importUserJob
+        status:
+          type: string
+          description: Last execution status
+          enum:
+            - COMPLETED
+            - STARTING
+            - STARTED
+            - STOPPING
+            - STOPPED
+            - FAILED
+            - ABANDONED
+            - UNKNOWN
+        lastExecutionTime:
+          type: string
+          format: date-time
+          description: Timestamp of the last execution
+    BatchJobDetail:
+      type: object
+      description: Detailed information about a batch job
+      properties:
+        name:
+          type: string
+          description: Job name
+        stepNames:
+          type: array
+          description: Names of steps in this job
+          items:
+            type: string
+        executionCount:
+          type: integer
+          description: Total number of executions
+        lastExecution:
+          $ref: '#/components/schemas/JobExecution'
+    JobExecutionPage:
+      type: object
+      description: Paginated list of job executions
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobExecution'
+        page:
+          type: integer
+          description: Current page number
+        size:
+          type: integer
+          description: Page size
+        totalElements:
+          type: integer
+          description: Total number of executions
+        totalPages:
+          type: integer
+          description: Total number of pages
+    JobExecution:
+      type: object
+      description: A single job execution record
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Execution ID
+        jobId:
+          type: integer
+          format: int64
+          description: Job instance ID
+        jobName:
+          type: string
+          description: Name of the job
+        startTime:
+          type: string
+          format: date-time
+          description: Execution start time
+        endTime:
+          type: string
+          format: date-time
+          description: Execution end time
+        status:
+          type: string
+          description: Batch status
+          enum:
+            - COMPLETED
+            - STARTING
+            - STARTED
+            - STOPPING
+            - STOPPED
+            - FAILED
+            - ABANDONED
+            - UNKNOWN
+        exitCode:
+          type: string
+          description: Exit code (COMPLETED, FAILED, etc.)
+        exitDescription:
+          type: string
+          description: Exit message or error description
+        jobParameters:
+          type: object
+          description: Parameters used for this execution
+          additionalProperties:
+            type: string
+        stepExecutions:
+          type: array
+          description: Step execution details
+          items:
+            $ref: '#/components/schemas/StepExecution'
+    StepExecution:
+      type: object
+      description: Execution details for a single step
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Step execution ID
+        stepName:
+          type: string
+          description: Name of the step
+        status:
+          type: string
+          description: Step status
+          enum:
+            - COMPLETED
+            - STARTING
+            - STARTED
+            - STOPPING
+            - STOPPED
+            - FAILED
+            - ABANDONED
+            - UNKNOWN
+        readCount:
+          type: integer
+          description: Number of items read
+        writeCount:
+          type: integer
+          description: Number of items written
+        commitCount:
+          type: integer
+          description: Number of commits
+        rollbackCount:
+          type: integer
+          description: Number of rollbacks
+        readSkipCount:
+          type: integer
+          description: Number of items skipped during read
+        processSkipCount:
+          type: integer
+          description: Number of items skipped during processing
+        writeSkipCount:
+          type: integer
+          description: Number of items skipped during write
+        filterCount:
+          type: integer
+          description: Number of items filtered
+        startTime:
+          type: string
+          format: date-time
+          description: Step start time
+        endTime:
+          type: string
+          format: date-time
+          description: Step end time
+        exitCode:
+          type: string
+          description: Step exit code
+        exitDescription:
+          type: string
+          description: Step exit message
+    JobInstancePage:
+      type: object
+      description: Paginated list of job instances
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobInstance'
+        page:
+          type: integer
+        size:
+          type: integer
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
+    JobInstance:
+      type: object
+      description: A job instance representing a unique set of job parameters
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Job instance ID
+        jobName:
+          type: string
+          description: Job name
+        jobKey:
+          type: string
+          description: Unique key derived from job parameters
+        jobParameters:
+          type: object
+          description: Job parameters for this instance
+          additionalProperties:
+            type: string
