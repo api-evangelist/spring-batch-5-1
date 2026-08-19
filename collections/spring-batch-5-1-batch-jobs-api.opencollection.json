@@ -1,0 +1,108 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Spring Batch 5.1 Actuator Batch Jobs API",
+    "version": "5.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Batch Jobs",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "List Batch Jobs",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/actuator/batch/jobs"
+          },
+          "docs": "Returns all registered Spring Batch jobs in the application context with their current status and last execution information."
+        },
+        {
+          "info": {
+            "name": "Get Batch Job Details",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/actuator/batch/jobs/:jobName",
+            "params": [
+              {
+                "name": "jobName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the batch job"
+              }
+            ]
+          },
+          "docs": "Returns details for a specific batch job including its current configuration and execution history summary."
+        },
+        {
+          "info": {
+            "name": "List Job Executions",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/actuator/batch/jobs/:jobName/executions",
+            "params": [
+              {
+                "name": "jobName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the batch job"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query",
+                "description": "Page number (zero-based)"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query",
+                "description": "Number of executions per page"
+              }
+            ]
+          },
+          "docs": "Returns execution history for a specific batch job, including start time, end time, status, and exit code for each execution."
+        },
+        {
+          "info": {
+            "name": "List Job Instances",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/actuator/batch/jobs/:jobName/instances",
+            "params": [
+              {
+                "name": "jobName",
+                "value": "",
+                "type": "path",
+                "description": "Name of the batch job"
+              },
+              {
+                "name": "page",
+                "value": "",
+                "type": "query"
+              },
+              {
+                "name": "size",
+                "value": "",
+                "type": "query"
+              }
+            ]
+          },
+          "docs": "Returns job instances for a specific batch job. Each instance represents a unique set of job parameters."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

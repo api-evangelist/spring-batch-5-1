@@ -1,0 +1,40 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "Spring Batch 5.1 Actuator Batch Jobs Health API",
+    "version": "5.1.0"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Health",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "Get Application Health",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/actuator/health"
+          },
+          "docs": "Returns the health status of the Spring Batch application including database connectivity and batch job health indicators."
+        },
+        {
+          "info": {
+            "name": "Get Batch Health",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://localhost:8080/actuator/health/batch"
+          },
+          "docs": "Returns health status specific to Spring Batch, including job repository connectivity and last job execution status."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}
