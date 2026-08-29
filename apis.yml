@@ -4,6 +4,18 @@ description: >-
   providing reusable functions for processing large volumes of data including logging, transaction management, job
   processing statistics, job restart, skip, and resource management. Version 5.1 introduces Micrometer-based metrics,
   virtual thread support, and enhanced chunk-oriented processing with improved fault tolerance.
+deliveryModel:
+  model: unknown
+  open_source: unknown
+  commercial: false
+  callable_host: false
+  label: Delivery model not determined — needs a product licence on record
+  confidence: low
+  source:
+  - openapi
+  - repository-unlicensed
+  generated: '2026-08-28'
+  method: derived
 accessModel:
   pricing: freemium
   onboarding: unknown
@@ -167,6 +179,12 @@ maintainers:
   - FN: Mahmoud Ben Hassine
     X-github: mminella
 common:
+  - type: Releases
+    url: https://github.com/spring-projects/spring-batch/releases
+  - type: CodeOfConduct
+    url: https://github.com/spring-projects/.github/blob/main/CODE_OF_CONDUCT.md
+  - type: ContributionGuide
+    url: https://github.com/spring-projects/spring-batch/blob/main/CONTRIBUTING.md
   - type: AgenticAccess
     url: agentic-access/spring-batch-5-1-agentic-access.yml
   - type: VulnerabilityDisclosure
