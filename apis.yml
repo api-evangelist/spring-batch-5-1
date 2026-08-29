@@ -96,7 +96,7 @@ apis:
     url: https://spring.io/guides/gs/batch-processing/
   - type: Reference Guide
     url: https://docs.spring.io/spring-batch/docs/5.1.x/reference/html/index-single.html
-  - type: Samples
+  - type: Examples
     url: https://github.com/spring-projects/spring-batch/tree/main/spring-batch-samples
   - type: ReleaseNotes
     url: https://github.com/spring-projects/spring-batch/releases/tag/5.1.0
@@ -128,7 +128,7 @@ apis:
     url: https://spring.io/guides/gs/batch-processing/
   - type: Reference Guide
     url: https://docs.spring.io/spring-batch/docs/5.1.x/reference/html/index-single.html
-  - type: Samples
+  - type: Examples
     url: https://github.com/spring-projects/spring-batch/tree/main/spring-batch-samples
   - type: ReleaseNotes
     url: https://github.com/spring-projects/spring-batch/releases/tag/5.1.0
@@ -160,7 +160,7 @@ apis:
     url: https://spring.io/guides/gs/batch-processing/
   - type: Reference Guide
     url: https://docs.spring.io/spring-batch/docs/5.1.x/reference/html/index-single.html
-  - type: Samples
+  - type: Examples
     url: https://github.com/spring-projects/spring-batch/tree/main/spring-batch-samples
   - type: ReleaseNotes
     url: https://github.com/spring-projects/spring-batch/releases/tag/5.1.0
