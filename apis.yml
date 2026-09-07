@@ -179,6 +179,10 @@ maintainers:
   - FN: Mahmoud Ben Hassine
     X-github: mminella
 common:
+  - type: Support
+    url: https://spring.io/support
+  - type: Forums
+    url: https://stackoverflow.com/questions/tagged/spring-batch
   - type: Releases
     url: https://github.com/spring-projects/spring-batch/releases
   - type: CodeOfConduct
