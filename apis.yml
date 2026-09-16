@@ -1,9 +1,9 @@
 name: Spring Batch 5.1
-description: >-
-  Spring Batch 5.1 is the latest major release of the enterprise batch processing framework for the Spring ecosystem,
-  providing reusable functions for processing large volumes of data including logging, transaction management, job
-  processing statistics, job restart, skip, and resource management. Version 5.1 introduces Micrometer-based metrics,
-  virtual thread support, and enhanced chunk-oriented processing with improved fault tolerance.
+description: Spring Batch 5.1 is the latest major release of the enterprise batch processing framework
+  for the Spring ecosystem, providing reusable functions for processing large volumes of data including
+  logging, transaction management, job processing statistics, job restart, skip, and resource management.
+  Version 5.1 introduces Micrometer-based metrics, virtual thread support, and enhanced chunk-oriented
+  processing with improved fault tolerance.
 deliveryModel:
   model: unknown
   open_source: unknown
@@ -32,21 +32,20 @@ image: https://spring.io/img/projects/spring-batch.svg
 url: https://spring.io/projects/spring-batch
 kind: opensource
 created: '2025-01-01'
-modified: '2026-05-19'
+modified: '2026-09-16'
 specificationVersion: '0.23'
 tags:
-  - Batch Processing
-  - Data Processing
-  - Enterprise
-  - ETL
-  - Java
-  - Job Scheduling
-  - Spring Framework
+- Batch Processing
+- Data Processing
+- Enterprise
+- ETL
+- Java
+- Job Scheduling
+- Spring Framework
 apis:
 - name: Spring Batch 5.1 Infrastructure API
-  description: >-
-    Infrastructure components for Spring Batch including ItemReader, ItemWriter, ItemProcessor implementations
-    for flat files, XML, JSON, JPA, JDBC, MongoDB, and remote chunking/partitioning support.
+  description: Infrastructure components for Spring Batch including ItemReader, ItemWriter, ItemProcessor
+    implementations for flat files, XML, JSON, JPA, JDBC, MongoDB, and remote chunking/partitioning support.
   humanURL: https://docs.spring.io/spring-batch/docs/5.1.x/reference/html/readersAndWriters.html
   baseURL: https://github.com/spring-projects/spring-batch
   tags:
@@ -58,14 +57,11 @@ apis:
   - type: Documentation
     url: https://docs.spring.io/spring-batch/docs/5.1.x/reference/html/readersAndWriters.html
   - type: API Documentation
-    url: >-
-      https://docs.spring.io/spring-batch/docs/5.1.x/api/org/springframework/batch/item/package-summary.html
+    url: https://docs.spring.io/spring-batch/docs/5.1.x/api/org/springframework/batch/item/package-summary.html
 - name: Spring Batch 5.1 Integration API
-  description: >-
-    Spring Batch integration with Spring Integration for remote partitioning, remote chunking, and message-driven
-    batch processing.
-  humanURL: >-
-    https://docs.spring.io/spring-batch/docs/5.1.x/reference/html/spring-batch-integration.html
+  description: Spring Batch integration with Spring Integration for remote partitioning, remote chunking,
+    and message-driven batch processing.
+  humanURL: https://docs.spring.io/spring-batch/docs/5.1.x/reference/html/spring-batch-integration.html
   baseURL: https://github.com/spring-projects/spring-batch
   tags:
   - Integration
@@ -74,8 +70,7 @@ apis:
   - Remote Partitioning
   properties:
   - type: Documentation
-    url: >-
-      https://docs.spring.io/spring-batch/docs/5.1.x/reference/html/spring-batch-integration.html
+    url: https://docs.spring.io/spring-batch/docs/5.1.x/reference/html/spring-batch-integration.html
 - aid: spring-batch-5-1:spring-batch-5-1-batch-jobs-api
   name: Spring Batch 5.1 Batch Jobs API
   description: Batch job execution management and monitoring
@@ -173,48 +168,50 @@ apis:
   - type: SpectralRules
     url: rules/spring-batch-51-rules.yml
 maintainers:
-  - name: Spring Team
-    email: spring-batch@broadcom.com
-    url: https://spring.io/team
-  - FN: Mahmoud Ben Hassine
-    X-github: mminella
+- name: Spring Team
+  email: spring-batch@broadcom.com
+  url: https://spring.io/team
+- FN: Mahmoud Ben Hassine
+  X-github: mminella
 common:
-  - type: Support
-    url: https://spring.io/support
-  - type: Forums
-    url: https://stackoverflow.com/questions/tagged/spring-batch
-  - type: Releases
-    url: https://github.com/spring-projects/spring-batch/releases
-  - type: CodeOfConduct
-    url: https://github.com/spring-projects/.github/blob/main/CODE_OF_CONDUCT.md
-  - type: ContributionGuide
-    url: https://github.com/spring-projects/spring-batch/blob/main/CONTRIBUTING.md
-  - type: AgenticAccess
-    url: agentic-access/spring-batch-5-1-agentic-access.yml
-  - type: VulnerabilityDisclosure
-    url: security/spring-batch-5-1-vulnerability-disclosure.yml
-  - type: DomainSecurity
-    url: security/spring-batch-5-1-domain-security.yml
-  - type: Blog
-    url: https://spring.io/blog/category/spring-batch
-  - type: StackOverflow
-    url: https://stackoverflow.com/questions/tagged/spring-batch
-  - type: GitHubIssues
-    url: https://github.com/spring-projects/spring-batch/issues
-  - type: GitHubDiscussions
-    url: https://github.com/spring-projects/spring-batch/discussions
-  - type: License
-    url: https://github.com/spring-projects/spring-batch/blob/main/LICENSE
-  - type: Contributing Guidelines
-    url: https://github.com/spring-projects/spring-batch/blob/main/CONTRIBUTING.md
-  - type: Security Policy
-    url: https://github.com/spring-projects/spring-batch/security/policy
-  - type: Maven Central
-    url: https://search.maven.org/search?q=g:org.springframework.batch
+- type: Website
+  url: https://spring.io
+- type: Support
+  url: https://spring.io/support
+- type: Forums
+  url: https://stackoverflow.com/questions/tagged/spring-batch
+- type: Releases
+  url: https://github.com/spring-projects/spring-batch/releases
+- type: CodeOfConduct
+  url: https://github.com/spring-projects/.github/blob/main/CODE_OF_CONDUCT.md
+- type: ContributionGuide
+  url: https://github.com/spring-projects/spring-batch/blob/main/CONTRIBUTING.md
+- type: AgenticAccess
+  url: agentic-access/spring-batch-5-1-agentic-access.yml
+- type: VulnerabilityDisclosure
+  url: security/spring-batch-5-1-vulnerability-disclosure.yml
+- type: DomainSecurity
+  url: security/spring-batch-5-1-domain-security.yml
+- type: Blog
+  url: https://spring.io/blog/category/spring-batch
+- type: StackOverflow
+  url: https://stackoverflow.com/questions/tagged/spring-batch
+- type: GitHubIssues
+  url: https://github.com/spring-projects/spring-batch/issues
+- type: GitHubDiscussions
+  url: https://github.com/spring-projects/spring-batch/discussions
+- type: License
+  url: https://github.com/spring-projects/spring-batch/blob/main/LICENSE
+- type: Contributing Guidelines
+  url: https://github.com/spring-projects/spring-batch/blob/main/CONTRIBUTING.md
+- type: Security Policy
+  url: https://github.com/spring-projects/spring-batch/security/policy
+- type: Maven Central
+  url: https://search.maven.org/search?q=g:org.springframework.batch
 include:
-  - name: Spring Framework
-    url: https://spring.io/projects/spring-framework
-  - name: Spring Boot
-    url: https://spring.io/projects/spring-boot
-  - name: Spring Integration
-    url: https://spring.io/projects/spring-integration
+- name: Spring Framework
+  url: https://spring.io/projects/spring-framework
+- name: Spring Boot
+  url: https://spring.io/projects/spring-boot
+- name: Spring Integration
+  url: https://spring.io/projects/spring-integration
