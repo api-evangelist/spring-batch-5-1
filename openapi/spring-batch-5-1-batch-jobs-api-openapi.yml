@@ -125,22 +125,6 @@ paths:
                 $ref: '#/components/schemas/JobInstancePage'
 components:
   schemas:
-    JobInstancePage:
-      type: object
-      description: Paginated list of job instances
-      properties:
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/JobInstance'
-        page:
-          type: integer
-        size:
-          type: integer
-        totalElements:
-          type: integer
-        totalPages:
-          type: integer
     BatchJobDetail:
       type: object
       description: Detailed information about a batch job
@@ -158,26 +142,6 @@ components:
           description: Total number of executions
         lastExecution:
           $ref: '#/components/schemas/JobExecution'
-    JobExecutionPage:
-      type: object
-      description: Paginated list of job executions
-      properties:
-        content:
-          type: array
-          items:
-            $ref: '#/components/schemas/JobExecution'
-        page:
-          type: integer
-          description: Current page number
-        size:
-          type: integer
-          description: Page size
-        totalElements:
-          type: integer
-          description: Total number of executions
-        totalPages:
-          type: integer
-          description: Total number of pages
     JobInstance:
       type: object
       description: A job instance representing a unique set of job parameters
@@ -197,65 +161,6 @@ components:
           description: Job parameters for this instance
           additionalProperties:
             type: string
-    BatchJobList:
-      type: object
-      description: List of registered batch jobs
-      properties:
-        jobs:
-          type: array
-          items:
-            $ref: '#/components/schemas/BatchJobSummary'
-    JobExecution:
-      type: object
-      description: A single job execution record
-      properties:
-        id:
-          type: integer
-          format: int64
-          description: Execution ID
-        jobId:
-          type: integer
-          format: int64
-          description: Job instance ID
-        jobName:
-          type: string
-          description: Name of the job
-        startTime:
-          type: string
-          format: date-time
-          description: Execution start time
-        endTime:
-          type: string
-          format: date-time
-          description: Execution end time
-        status:
-          type: string
-          description: Batch status
-          enum:
-          - COMPLETED
-          - STARTING
-          - STARTED
-          - STOPPING
-          - STOPPED
-          - FAILED
-          - ABANDONED
-          - UNKNOWN
-        exitCode:
-          type: string
-          description: Exit code (COMPLETED, FAILED, etc.)
-        exitDescription:
-          type: string
-          description: Exit message or error description
-        jobParameters:
-          type: object
-          description: Parameters used for this execution
-          additionalProperties:
-            type: string
-        stepExecutions:
-          type: array
-          description: Step execution details
-          items:
-            $ref: '#/components/schemas/StepExecution'
     StepExecution:
       type: object
       description: Execution details for a single step
@@ -317,6 +222,30 @@ components:
         exitDescription:
           type: string
           description: Step exit message
+    BatchJobList:
+      type: object
+      description: List of registered batch jobs
+      properties:
+        jobs:
+          type: array
+          items:
+            $ref: '#/components/schemas/BatchJobSummary'
+    JobInstancePage:
+      type: object
+      description: Paginated list of job instances
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobInstance'
+        page:
+          type: integer
+        size:
+          type: integer
+        totalElements:
+          type: integer
+        totalPages:
+          type: integer
     BatchJobSummary:
       type: object
       description: Summary of a batch job
@@ -341,3 +270,74 @@ components:
           type: string
           format: date-time
           description: Timestamp of the last execution
+    JobExecutionPage:
+      type: object
+      description: Paginated list of job executions
+      properties:
+        content:
+          type: array
+          items:
+            $ref: '#/components/schemas/JobExecution'
+        page:
+          type: integer
+          description: Current page number
+        size:
+          type: integer
+          description: Page size
+        totalElements:
+          type: integer
+          description: Total number of executions
+        totalPages:
+          type: integer
+          description: Total number of pages
+    JobExecution:
+      type: object
+      description: A single job execution record
+      properties:
+        id:
+          type: integer
+          format: int64
+          description: Execution ID
+        jobId:
+          type: integer
+          format: int64
+          description: Job instance ID
+        jobName:
+          type: string
+          description: Name of the job
+        startTime:
+          type: string
+          format: date-time
+          description: Execution start time
+        endTime:
+          type: string
+          format: date-time
+          description: Execution end time
+        status:
+          type: string
+          description: Batch status
+          enum:
+          - COMPLETED
+          - STARTING
+          - STARTED
+          - STOPPING
+          - STOPPED
+          - FAILED
+          - ABANDONED
+          - UNKNOWN
+        exitCode:
+          type: string
+          description: Exit code (COMPLETED, FAILED, etc.)
+        exitDescription:
+          type: string
+          description: Exit message or error description
+        jobParameters:
+          type: object
+          description: Parameters used for this execution
+          additionalProperties:
+            type: string
+        stepExecutions:
+          type: array
+          description: Step execution details
+          items:
+            $ref: '#/components/schemas/StepExecution'
